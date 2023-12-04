@@ -1,12 +1,12 @@
 /**
- * \file test.cpp
+ * \file test2d.cpp
  * \author Zhihao Zhan (zhanzhihao_dt@163.com)
- * \brief test nano dbscan
+ * \brief test2d nano dbscan
  * \version 0.1
  * \date 2023-12-05
- * 
+ *
  * @copyright Copyright (c) 2023
- * 
+ *
  */
 
 #include <iostream>
@@ -17,8 +17,15 @@
 #include <pcl/io/pcd_io.h>
 #include <pcl/point_types.h>
 
-int main()
+int main(int argc, char **argv)
 {
+  if (argc != 3)
+  {
+    std::cout << "usage: ./test3d eps[float] min_pts[int]" << std::endl;
+  }
+  double    epsilon = std::stod(argv[1]);
+  const int min_pts = std::stoi(argv[2]);
+
   // define data
   const int                                             dim  = 2;
   std::shared_ptr<std::vector<std::array<double, dim>>> data = std::make_shared<std::vector<std::array<double, dim>>>();
@@ -30,7 +37,6 @@ int main()
   size_t n = 0;
   while (n < N)
   {
-    // data->push_back({{cloud_pts.points[n].x, cloud_pts.points[n].y, cloud_pts.points[n].z}});
     data->push_back({{cloud_pts.points[n].x, cloud_pts.points[n].y}});
     n++;
   }
@@ -38,18 +44,13 @@ int main()
   auto begin = std::chrono::high_resolution_clock::now();
   // build kdtree:
   auto adapt = Adaptor<std::array<double, dim>>(*data);
-
   using my_kd_tree_t =
       nanoflann::KDTreeSingleIndexAdaptor<nanoflann::L2_Adaptor<double, decltype(adapt)>, decltype(adapt), dim /* dim */
                                           >;
-
   my_kd_tree_t index(dim /*dim*/, adapt, {10 /* max leaf */});
-
   index.buildIndex();
 
   std::vector<std::vector<size_t>> clusters;
-  double                           epsilon = 1;
-  const int min_pts = 20;
   NanoDBSCAN<my_kd_tree_t, std::array<double, dim>>(index, data, epsilon, min_pts, nanoflann::SearchParameters(0),
                                                     clusters);
   auto end = std::chrono::high_resolution_clock::now();
@@ -80,7 +81,7 @@ int main()
   std::cout << "total cost: " << time_inc(end, begin) << ", clusters:" << clusters.size() << std::endl;
   cluster_cloud.width  = cluster_cloud.points.size();
   cluster_cloud.height = 1;
-  pcl::io::savePCDFile("dbscan_out.pcd", cluster_cloud);
+  pcl::io::savePCDFile("dbscan_out_2d.pcd", cluster_cloud);
 
   return 0;
 }

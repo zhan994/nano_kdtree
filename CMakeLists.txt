@@ -8,5 +8,9 @@ include_directories(
   ${PCL_INCLUDE_DIRS}
 )
 
-add_executable(test src/test.cpp)
-target_link_libraries(test pthread ${PCL_LIBRARIES})
+add_executable(test2d src/test2d.cpp)
+target_link_libraries(test2d pthread ${PCL_LIBRARIES})
+
+
+add_executable(test3d src/test3d.cpp)
+target_link_libraries(test3d pthread ${PCL_LIBRARIES})
