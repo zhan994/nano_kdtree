@@ -28,24 +28,18 @@
 int main()
 {
   // define data
-  const int                                             dim  = 3;
+  const int                                             dim  = 2;
   std::shared_ptr<std::vector<std::array<double, dim>>> data = std::make_shared<std::vector<std::array<double, dim>>>();
 
-  // generate artificial data
-  std::random_device                     rd;
-  std::mt19937                           gen(rd());
-  std::uniform_real_distribution<double> distr(-1, 1);
-  size_t                                 N = 500;
-  size_t                                 n = 0;
-
   pcl::PointCloud<pcl::PointXYZRGB> cloud_pts;
-  pcl::io::loadPCDFile("/home/zhan/segment.pcd", cloud_pts);
-  N = cloud_pts.points.size();
-
+  pcl::io::loadPCDFile("../pcd/segment.pcd", cloud_pts);
+  size_t N = cloud_pts.points.size();
   data->reserve(N);
+  size_t n = 0;
   while (n < N)
   {
-    data->push_back({{cloud_pts.points[n].x, cloud_pts.points[n].y, cloud_pts.points[n].z}});
+    // data->push_back({{cloud_pts.points[n].x, cloud_pts.points[n].y, cloud_pts.points[n].z}});
+    data->push_back({{cloud_pts.points[n].x, cloud_pts.points[n].y}});
     n++;
   }
 
@@ -63,8 +57,7 @@ int main()
 
   std::vector<std::vector<size_t>> clusters;
   double                           epsilon = 1;
-  epsilon *= epsilon;
-  const int min_pts = 15;
+  const int min_pts = 20;
   NanoDBSCAN<my_kd_tree_t, std::array<double, dim>>(index, data, epsilon, min_pts, nanoflann::SearchParameters(0),
                                                     clusters);
   auto end = std::chrono::high_resolution_clock::now();
@@ -83,7 +76,7 @@ int main()
       pcl::PointXYZRGB point;
       point.x = data->at(id)[0];
       point.y = data->at(id)[1];
-      point.z = data->at(id)[2];
+      point.z = 0;
 
       point.r = r;
       point.g = g;
