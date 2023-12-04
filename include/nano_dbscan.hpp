@@ -13,7 +13,45 @@
 #define NANO_DBSCAN_H
 
 #include "nanoflann.hpp"
-#include "utils.h"
+
+#include <chrono>
+
+double time_inc(std::chrono::high_resolution_clock::time_point &t_end,
+                std::chrono::high_resolution_clock::time_point &t_begin)
+{
+  return std::chrono::duration_cast<std::chrono::duration<double>>(t_end - t_begin).count() * 1000;
+}
+
+template <typename T>
+struct Adaptor {
+  Adaptor(const std::vector<T> &position) : position_(position)
+  {}
+  const std::vector<T> &position_;
+
+  inline size_t kdtree_get_point_count() const
+  {
+    return position_.size();
+  }
+  inline double kdtree_get_pt(const size_t idx, const size_t dim = 0) const
+  {
+    if (dim == 0)
+    {
+      return position_[idx].at(0);
+    } else if (dim == 1)
+    {
+      return position_[idx].at(1);
+    } else
+    {
+      return position_[idx].at(2);
+    }
+  }
+
+  template <class BBOX>
+  bool kdtree_get_bbox(BBOX & /*bb*/) const
+  {
+    return false;
+  }
+};
 
 /**
  * \brief DBSCAN based on nanoflann
@@ -36,48 +74,45 @@ void NanoDBSCAN(const KdtreeType &                            tree,
                 std::vector<std::vector<size_t>> &            clusters)
 {
   std::vector<bool> visited;
-  visited.reserve(data->size());
+  visited.resize(data->size(), false);
   std::vector<nanoflann::ResultItem<uint, double>> neighbor_pts;
   std::vector<nanoflann::ResultItem<uint, double>> neighbor_sub_pts;
 
+  std::vector<size_t> cluster_outliers;
   for (size_t i = 0; i < data->size(); ++i)
   {
     // check if the point is visited
     if (visited[i])
-    {
       continue;
-    }
-    visited[i] = true;
 
     // radius search around the unvisited point
+    visited[i] = true;
     auto begin = std::chrono::high_resolution_clock::now();
     tree.radiusSearch(data->at(i).data(), epsilon, neighbor_pts, params);
     auto end = std::chrono::high_resolution_clock::now();
-    std::cout << "radius search cost: " << time_inc(end, begin) << std::endl;
+    // std::cout << "radius search cost: " << time_inc(end, begin) << std::endl;
 
     // check if the point is noise
     if (neighbor_pts.size() < static_cast<size_t>(min_pts))
     {
+      cluster_outliers.emplace_back(i);
       continue;
     }
 
     // expand the clusters
     std::vector<size_t> cluster = std::vector<size_t>({i});
-
     while (!neighbor_pts.empty())
     {
       const unsigned long nb_idx = neighbor_pts.back().first;
       neighbor_pts.pop_back();
       if (visited[nb_idx])
-      {
         continue;
-      }
-      visited[nb_idx] = true;
 
-      begin = std::chrono::high_resolution_clock::now();
+      visited[nb_idx] = true;
+      begin           = std::chrono::high_resolution_clock::now();
       tree.radiusSearch(data->at(nb_idx).data(), epsilon, neighbor_sub_pts, params);
       end = std::chrono::high_resolution_clock::now();
-      std::cout << "radius search cost: " << time_inc(end, begin) << std::endl;
+      // std::cout << "radius search cost: " << time_inc(end, begin) << std::endl;
 
       if (neighbor_sub_pts.size() >= static_cast<size_t>(min_pts))
       {
@@ -87,6 +122,7 @@ void NanoDBSCAN(const KdtreeType &                            tree,
     }
     clusters.emplace_back(std::move(cluster));
   }
+  clusters.emplace_back(std::move(cluster_outliers));
 }
 
 #endif // NANO_DBSCAN_H
