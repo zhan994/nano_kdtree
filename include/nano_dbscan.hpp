@@ -16,12 +16,24 @@
 
 #include <chrono>
 
+/**
+ * \brief time cost in [ms]
+ * 
+ * \param t_end 
+ * \param t_begin 
+ * \return double 
+ */
 double time_inc(std::chrono::high_resolution_clock::time_point &t_end,
                 std::chrono::high_resolution_clock::time_point &t_begin)
 {
   return std::chrono::duration_cast<std::chrono::duration<double>>(t_end - t_begin).count() * 1000;
 }
 
+/**
+ * \brief KdtreeAdaptor template struct
+ * 
+ * \tparam T element type
+ */
 template <typename T>
 struct KdtreeAdaptor {
   KdtreeAdaptor(const std::vector<T> &position) : position_(position)
