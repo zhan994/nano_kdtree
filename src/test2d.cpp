@@ -43,7 +43,7 @@ int main(int argc, char **argv)
 
   auto begin = std::chrono::high_resolution_clock::now();
   // build kdtree:
-  auto adapt = Adaptor<std::array<double, dim>>(*data);
+  auto adapt = KdtreeAdaptor<std::array<double, dim>>(*data);
   using my_kd_tree_t =
       nanoflann::KDTreeSingleIndexAdaptor<nanoflann::L2_Adaptor<double, decltype(adapt)>, decltype(adapt), dim /* dim */
                                           >;

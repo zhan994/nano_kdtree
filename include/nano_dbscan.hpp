@@ -23,8 +23,8 @@ double time_inc(std::chrono::high_resolution_clock::time_point &t_end,
 }
 
 template <typename T>
-struct Adaptor {
-  Adaptor(const std::vector<T> &position) : position_(position)
+struct KdtreeAdaptor {
+  KdtreeAdaptor(const std::vector<T> &position) : position_(position)
   {}
   const std::vector<T> &position_;
 
