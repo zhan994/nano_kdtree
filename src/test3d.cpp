@@ -52,8 +52,9 @@ int main(int argc, char **argv)
 
   // step: 2. nano_dbscan
   std::vector<std::vector<size_t>> clusters;
-  NanoDBSCAN<my_kd_tree_t, std::array<double, dim>>(index, data, epsilon, min_pts, nanoflann::SearchParameters(0),
-                                                    clusters);
+  // note: L2_Adaptor -> radius should be squared.
+  NanoDBSCAN<my_kd_tree_t, std::array<double, dim>>(index, data, epsilon * epsilon, min_pts,
+                                                    nanoflann::SearchParameters(0), clusters);
   auto end = std::chrono::high_resolution_clock::now();
 
   // step: 3. RESULTS
