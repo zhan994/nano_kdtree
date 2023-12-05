@@ -22,3 +22,9 @@ make
 # 3d
 ./test3d eps[float] min_pts[int] 
 ```
+
+The result of example **test3d**.
+
+![](imgs/test3d.png)
+
+![](imgs/test3d.gif)
