@@ -1,5 +1,5 @@
-# Nano Kdtree
-**Light-weight Kdtree Algorithms based on nanoflann.**
+# Nano KdTree
+**Light-weight KdTree Algorithms based on nanoflann.**
 
 ## Content
 - Nano DBSCAN
@@ -13,17 +13,17 @@
 To display the result, use **PCL** to save pointcloud as ".pcd" file.
 
 ```bash
-git clone https://github.com/zhan994/nano_dbscan.git
-cd nano_dbscan
+git clone https://github.com/zhan994/nano_kdtree.git
+cd nano_kdtree
 mkdir build && cd build
 cmake ..
 make
 
 # 2d
-./test2d eps[float] min_pts[int] 
+./test_nano_dbscan_2d eps[float] min_pts[int] 
 
 # 3d
-./test3d eps[float] min_pts[int] 
+./test_nano_dbscan_3d eps[float] min_pts[int] 
 ```
 
 The result of example **test_nano_dbscan_3d**.
