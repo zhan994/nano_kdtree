@@ -28,6 +28,6 @@ make
 
 The result of example **test3d**.
 
-![](imgs/test3d.png)
+![](imgs/test_nano_dbscan_3d.png)
 
-![](imgs/test3d.gif)
+![](imgs/test_nano_dbscan_3d.gif)
