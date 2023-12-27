@@ -1,5 +1,8 @@
-# Nano DBSCAN
-**Light-weight Density-Based Spatial Clustering of Applications with Noise based on nanoflann.**
+# Nano Kdtree
+**Light-weight Kdtree Algorithms based on nanoflann.**
+
+## Content
+- Nano DBSCAN
 
 ## Dependency
 
