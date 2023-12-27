@@ -26,7 +26,7 @@ make
 ./test3d eps[float] min_pts[int] 
 ```
 
-The result of example **test3d**.
+The result of example **test_nano_dbscan_3d**.
 
 ![](imgs/test_nano_dbscan_3d.png)
 
