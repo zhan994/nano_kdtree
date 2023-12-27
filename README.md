@@ -6,11 +6,11 @@
 
 ## Dependency
 
-- PCL: save and display the result of **Nano DBSCAN**.
+- PCL: save and display the result.
 
 ## Run
 
-To display the result of **Nano DBSCAN**, use **PCL** to save pointcloud as ".pcd" file.
+To display the result, use **PCL** to save pointcloud as ".pcd" file.
 
 ```bash
 git clone https://github.com/zhan994/nano_dbscan.git
