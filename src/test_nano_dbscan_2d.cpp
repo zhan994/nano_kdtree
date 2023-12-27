@@ -1,7 +1,7 @@
 /**
- * \file test3d.cpp
+ * \file test_nano_dbscan_2d.cpp
  * \author Zhihao Zhan (zhanzhihao_dt@163.com)
- * \brief test3d nano dbscan
+ * \brief test2d nano dbscan
  * \version 0.1
  * \date 2023-12-05
  *
@@ -27,7 +27,7 @@ int main(int argc, char **argv)
   const int min_pts = std::stoi(argv[2]);
 
   // define data
-  const int                                             dim  = 3;
+  const int                                             dim  = 2;
   std::shared_ptr<std::vector<std::array<double, dim>>> data = std::make_shared<std::vector<std::array<double, dim>>>();
 
   pcl::PointCloud<pcl::PointXYZRGB> cloud_pts;
@@ -37,7 +37,7 @@ int main(int argc, char **argv)
   size_t n = 0;
   while (n < N)
   {
-    data->push_back({{cloud_pts.points[n].x, cloud_pts.points[n].y, cloud_pts.points[n].z}});
+    data->push_back({{cloud_pts.points[n].x, cloud_pts.points[n].y}});
     n++;
   }
 
@@ -71,7 +71,7 @@ int main(int argc, char **argv)
       pcl::PointXYZRGB point;
       point.x = data->at(id)[0];
       point.y = data->at(id)[1];
-      point.z = data->at(id)[2];
+      point.z = 0;
 
       point.r = r;
       point.g = g;
@@ -83,7 +83,7 @@ int main(int argc, char **argv)
   std::cout << "total cost: " << time_inc(end, begin) << ", clusters:" << clusters.size() << std::endl;
   cluster_cloud.width  = cluster_cloud.points.size();
   cluster_cloud.height = 1;
-  pcl::io::savePCDFile("dbscan_out_3d.pcd", cluster_cloud);
+  pcl::io::savePCDFile("dbscan_out_2d.pcd", cluster_cloud);
 
   return 0;
 }
