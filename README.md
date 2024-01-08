@@ -1,14 +1,15 @@
 # Nano KdTree
 **Light-weight KdTree Algorithms based on nanoflann.**
 
-# Content
+## Content
+
 - Nano DBSCAN
 
-# Dependency
+## Dependency
 
 - PCL: save and display the result.
 
-# Run
+## Run
 
 To display the result, use **PCL** to save pointcloud as ".pcd" file.
 
